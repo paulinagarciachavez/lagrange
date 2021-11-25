@@ -1,13 +1,15 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Nov 25 14:33:34 2021
+
+@author: HP
+"""
 import matplotlib.pyplot as plt
 import math as mt
 from functools import reduce
 import numpy as np
-
-
 def normal_den(x):
 	return (1/mt.sqrt(2*mt.pi))*mt.exp(-0.5*mt.pow(x, 2))
-
-# Asignar valores, (inicio,final,#términos) el # de términos debe de ser mayor a 3 e impar.
 tamaño=15
 x_c = np.linspace(-4,1,tamaño)
 y_c = [normal_den(i) for i in x_c]
@@ -21,9 +23,7 @@ def _lagrange_(x, y, x_at):
     return res
 def _baslagrange_(x, idx, x_at):
     res_1=reduce(lambda x, y: x*y,[(x_at - j)/(x[idx] - j) for i,j in enumerate(x) if idx != i]) 
-    return res_1
-    
-    
+    return res_1    
 aux1=[]
 aux2=[]
 result=0
@@ -37,7 +37,6 @@ for i in range(0,len(x_c)-2,2):
     evalmax=((poli[0]*mt.pow(aux1[2],3)/3)+(poli[1]*mt.pow(aux1[2],2)/2)+(poli[2]*aux1[2]))
     integralfuncion=evalmax-evalmin
     result+=integralfuncion
-
 plt.plot(x_c,y_c)
 for i in range(0,len(x_c)-2,2):
     aux1=[x_c[i],x_c[i+1],x_c[i+2]]
