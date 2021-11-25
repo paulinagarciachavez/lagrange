@@ -1,0 +1,54 @@
+import matplotlib.pyplot as plt
+import math as mt
+from functools import reduce
+import numpy as np
+
+
+def normal_den(x):
+	return (1/mt.sqrt(2*mt.pi))*mt.exp(-0.5*mt.pow(x, 2))
+
+# Asignar valores, (inicio,final,#términos) el # de términos debe de ser mayor a 3 e impar.
+tamaño=15
+x_c = np.linspace(-4,1,tamaño)
+y_c = [normal_den(i) for i in x_c]
+def _pollagrange_(yeval):
+    a=np.array([[1,1,1],[4,2,1],[9,3,1]])
+    b=np.array(yeval)
+    x=np.linalg.solve(a,b)
+    return x
+def _lagrange_(x, y, x_at):
+    res=sum([j*_baslagrange_(x, i, x_at) for i,j in enumerate(y)])
+    return res
+def _baslagrange_(x, idx, x_at):
+    res_1=reduce(lambda x, y: x*y,[(x_at - j)/(x[idx] - j) for i,j in enumerate(x) if idx != i]) 
+    return res_1
+    
+    
+aux1=[]
+aux2=[]
+result=0
+for i in range(0,len(x_c)-2,2):
+    aux1=[x_c[i],x_c[i+1],x_c[i+2]]
+    aux2=[y_c[i],y_c[i+1],y_c[i+2]]
+    y_eval=[_lagrange_(aux1,aux2,l+1)for l in range(3)]
+    poli=_pollagrange_(y_eval)
+    poli=poli.tolist()
+    evalmin=((poli[0]*mt.pow(aux1[0],3)/3)+(poli[1]*mt.pow(aux1[0],2)/2)+(poli[2]*aux1[0]))
+    evalmax=((poli[0]*mt.pow(aux1[2],3)/3)+(poli[1]*mt.pow(aux1[2],2)/2)+(poli[2]*aux1[2]))
+    integralfuncion=evalmax-evalmin
+    result+=integralfuncion
+
+plt.plot(x_c,y_c)
+for i in range(0,len(x_c)-2,2):
+    aux1=[x_c[i],x_c[i+1],x_c[i+2]]
+    aux2=[y_c[i],y_c[i+1],y_c[i+2]]
+    evaly=[_lagrange_(aux1,aux2,i) for i in aux1]
+    evalyneg=[_lagrange_(aux1,aux2,aux1[0]-.5)]
+    evalyp=[_lagrange_(aux1,aux2,aux1[0]+.5)]
+    lasty=evalyneg+evaly+evalyp
+    negaux1=[aux1[0]-.5]
+    aux1p=[aux1[0]+.5]
+    lastaux1=negaux1+aux1+aux1p
+    plt.plot(lastaux1,lasty)
+    plt.savefig("funcionlagrange.png")   
+print(result, " EL TOTAL DE PUNTO REQUERIDOS ES: ",tamaño,"")
