@@ -50,4 +50,4 @@ for i in range(0,len(x_c)-2,2):
     lastaux1=negaux1+aux1+aux1p
     plt.plot(lastaux1,lasty)
     plt.savefig("funcionlagrange.png")   
-print(result, " EL TOTAL DE PUNTO REQUERIDOS ES: ",tamaño,"")
+print(result, " EL TOTAL DE PUNTOS REQUERIDOS ES: ",tamaño,"")
